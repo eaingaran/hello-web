@@ -35,7 +35,10 @@ pipeline {
    steps {
     //sh "sudo kill \$(lsof -t -i:9001)"
     //sh 'fuser -n tcp -k 9001 | echo "killed"'
-    sh "curl -X POST 54.212.214.245:9001/actuator/shutdown"
+    catchError {
+            sh "curl -X POST 54.212.214.245:9001/actuator/shutdown"
+    }
+    //sh "curl -X POST 54.212.214.245:9001/actuator/shutdown"
    }
   }
   stage('deploy') {
