@@ -43,7 +43,7 @@ pipeline {
   }
   stage('deploy') {
    steps {
-    sh 'nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar > /dev/null 2>\&1 \&'
+    sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar > /dev/null 2>\&1 \&"
    }
   }
  }
