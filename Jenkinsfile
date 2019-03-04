@@ -17,7 +17,8 @@ pipeline  {
     }
     stage('publish')  {
       steps {
-        sh 'curl -X PUT -U admin:AP3FBGSctQB7PMkRdHSypbQjuVB -T build/libs/hello-web-0.0.1-SNAPSHOT.jar "http://54.212.214.245:8081/artifactory/libs-snapshot-local/hello-web-0.0.1.${BUILD_ID}.jar"'
+        sh 'curl -u admin:password -X PUT "http://54.212.214.245:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
+        //sh 'curl -X PUT -U admin:AP3FBGSctQB7PMkRdHSypbQjuVB -T build/libs/hello-web-0.0.1-SNAPSHOT.jar "http://54.212.214.245:8081/artifactory/libs-snapshot-local/hello-web-0.0.1.${BUILD_ID}.jar"'
       }
     }
     stage('deploy') {
