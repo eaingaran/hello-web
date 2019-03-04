@@ -37,8 +37,7 @@ pipeline {
   stage('deploy') {
    steps {
     sh 'echo "Hi"'
-    //sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
-    sh 'ps | grep java-fullstack | awk '{print \$1}' | xargs kill -9 || true nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
+    sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
    }
   }
  }
