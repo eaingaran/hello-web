@@ -33,13 +33,14 @@ pipeline {
   }
   stage('cleanup') {
    steps {
-    sh "sudo kill \$(lsof -t -i:9001)"
+    //sh "sudo kill \$(lsof -t -i:9001)"
     //sh 'fuser -n tcp -k 9001 | echo "killed"'
+    sh "curl -X POST 54.212.214.245:9001/actuator/shutdown"
    }
   }
   stage('deploy') {
    steps {
-    sh 'nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
+    sh 'nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar'
    }
   }
  }
