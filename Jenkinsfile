@@ -36,7 +36,7 @@ pipeline {
     //sh "sudo kill \$(lsof -t -i:9001)"
     //sh 'fuser -n tcp -k 9001 | echo "killed"'
     catchError {
-            sh "curl -X POST 54.212.214.245:9001/actuator/shutdown"
+            sh 'fuser -n tcp -k 9001 | echo "killed"'
     }
     //sh "curl -X POST 54.212.214.245:9001/actuator/shutdown"
    }
