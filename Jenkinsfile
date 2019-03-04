@@ -16,8 +16,9 @@ pipeline  {
       }
     }
     try {
-      stage("Building SONAR ...") {
-        sh './gradlew clean sonarqube'
+      stage("Running SONAR") {
+        sh 'echo "Hi"'
+        //sh './gradlew clean sonarqube'
       }
     } catch (e) {emailext attachLog: true, body: 'See attached log', subject: 'BUSINESS Build Failure', to: 'aingaran.elango@tcs.com'
         step([$class: 'WsCleanup'])
@@ -25,16 +26,19 @@ pipeline  {
     }
     stage('publish')  {
       steps {
-        sh 'curl -u admin:password -X PUT "http://54.212.214.245:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
+        sh 'echo "Hi"'
+        //sh 'curl -u admin:password -X PUT "http://54.212.214.245:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
       }
     }
     stage('cleanup') {
       steps {
-        sh "kill $(lsof -t -i:9001)"
+        sh 'echo "Hi"'
+        //sh "kill $(lsof -t -i:9001)"
     }
     stage('deploy') {
       steps {
-        sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
+        sh 'echo "Hi"'
+        //sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
       }
     }
   }
