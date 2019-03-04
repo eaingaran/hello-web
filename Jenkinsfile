@@ -15,15 +15,18 @@ pipeline {
     sh "gradle build"
    }
   }
-  try {
-   stage("Running SONAR") {
-    sh 'echo "Hi"'
-    //sh './gradlew clean sonarqube'
-   }
-  } catch (e) {
-   emailext attachLog: true, body: 'See attached log', subject: 'BUSINESS Build Failure', to: 'aingaran.elango@tcs.com'
-   step([$class: 'WsCleanup'])
-   return
+  stage("Running SONAR") {
+     steps {
+       try { 
+         sh 'echo "Hi"'
+         //sh './gradlew clean sonarqube'
+       }
+       catch (e) {
+         emailext attachLog: true, body: 'See attached log', subject: 'BUSINESS Build Failure', to: 'aingaran.elango@tcs.com'
+         step([$class: 'WsCleanup'])
+         return
+       }
+     }
   }
   stage('publish') {
    steps {
