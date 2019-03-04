@@ -43,7 +43,9 @@ pipeline {
   }
   stage('deploy') {
    steps {
-    sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &"
+
+sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
+    /*sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &"*/
    }
   }
  }
