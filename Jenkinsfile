@@ -30,7 +30,7 @@ pipeline {
   stage('cleanup') {
    steps {
     sh 'echo "Hi"'
-    sh "kill $(lsof -t -i:9001)"
+    sh "kill \$(lsof -t -i:9001)"
    }
   }
   stage('deploy') {
