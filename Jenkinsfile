@@ -15,6 +15,14 @@ pipeline  {
         sh "gradle build"
       }
     }
+    try {
+      stage("Building SONAR ...") {
+        sh './gradlew clean sonarqube'
+      }
+    } catch (e) {emailext attachLog: true, body: 'See attached log', subject: 'BUSINESS Build Failure', to: 'aingaran.elango@tcs.com'
+        step([$class: 'WsCleanup'])
+        return
+    }
     stage('publish')  {
       steps {
         sh 'curl -u admin:password -X PUT "http://54.212.214.245:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
