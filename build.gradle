@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.3.RELEASE'
 	id 'java'
+	id "org.sonarqube" version "2.7"
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -33,5 +34,14 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+sonarqube {
+	properties {
+		property "sonar.host.url", http://sonar.xxxxx.com //  url is your sonar server
+		property "sonar.projectName", "project  display name"   //  this name will appear in dashboard
+		property "sonar.projectKey", "projectKey" // It sould be a keybased on this report is created
+		property "sonar.groovy.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
 	}
 }
