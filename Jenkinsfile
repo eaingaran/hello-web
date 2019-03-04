@@ -1,38 +1,28 @@
 pipeline  {
   agent any
   tools {
-    maven 'maven'
+    maven 'gradle'
     jdk 'jdk1.8.0'
   }
   stages  {
     stage('clean')  {
       steps {
-        sh "mvn clean" 
+        sh "gradle clean" 
       }
     }
-    stage('compile')  {
+    stage('build')  {
       steps {
-        sh "mvn compile"
-      }
-    }
-    stage('test')  {
-      steps {
-        sh "mvn test"
-      }
-    }
-    stage('package')  {
-      steps {
-        sh "mvn -DskipTests package"
+        sh "gradle build"
       }
     }
     stage('publish')  {
       steps {
-        sh 'mvn deploy'
+        sh 'curl -X PUT -U admin:AP3FBGSctQB7PMkRdHSypbQjuVB -T build/libs/hello-web-0.0.1.jar "http://54.218.12.85:8081/artifactory/libs-release-local/hello-web/hello-web-0.0.1.jar"'
       }
     }
     stage('deploy') {
       steps {
-        sh "java -jar target/hello-web-0.0.1-SNAPSHOT.jar"
+        sh "ps | grep java-fullstack | awk '{print $1}' | xargs kill -9 || true env SERVER.PORT=8081 nohup java -jar ./build/libs/hello-web-0.0.1.jar &"
       }
     }
   }
