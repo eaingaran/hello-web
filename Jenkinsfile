@@ -22,8 +22,7 @@ pipeline {
   }
   stage("Running SONAR") {
    steps {
-       sh 'echo "Hi"'
-       //sh './gradlew clean sonarqube'
+       sh 'gradle clean sonarqube'
    }
   }
   stage('publish') {
