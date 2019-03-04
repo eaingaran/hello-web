@@ -17,7 +17,7 @@ pipeline  {
     }
     stage('publish')  {
       steps {
-        sh 'curl -X PUT -U admin:AP3FBGSctQB7PMkRdHSypbQjuVB -T build/libs/hello-web-0.0.1-SNAPSHOT.jar "http://54.212.214.245:8081/artifactory/libs-release-local/hello-web/hello-web-0.0.1.${env.BUILD_NUMBER}.jar"'
+        sh 'curl -X PUT -U admin:AP3FBGSctQB7PMkRdHSypbQjuVB -T build/libs/hello-web-0.0.1-SNAPSHOT.jar "http://54.212.214.245:8081/artifactory/libs-release-local/hello-web/hello-web-0.0.1.${env.BUILD_ID}.jar"'
       }
     }
     stage('deploy') {
