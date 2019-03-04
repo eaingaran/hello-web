@@ -24,19 +24,19 @@ pipeline {
   stage('publish') {
    steps {
     sh 'echo "Hi"'
-    //sh 'curl -u admin:password -X PUT "http://54.212.214.245:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
+    sh 'curl -u admin:password -X PUT "http://54.212.214.245:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
    }
   }
   stage('cleanup') {
    steps {
     sh 'echo "Hi"'
-    //sh "kill $(lsof -t -i:9001)"
+    sh "kill $(lsof -t -i:9001)"
    }
   }
   stage('deploy') {
    steps {
     sh 'echo "Hi"'
-    //sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
+    sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
    }
   }
  }
