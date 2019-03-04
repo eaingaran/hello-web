@@ -10,6 +10,11 @@ pipeline {
     sh "gradle clean"
    }
   }
+  stage('test') {
+   steps {
+    sh "gradle test"
+   }
+  }
   stage('build') {
    steps {
     sh "gradle build"
@@ -28,7 +33,7 @@ pipeline {
   }
   stage('cleanup') {
    steps {
-    sh "sudo -S kill \$(lsof -t -i:9001)"
+    sh "sudo kill \$(lsof -t -i:9001)"
     //sh 'fuser -n tcp -k 9001 | echo "killed"'
    }
   }
