@@ -28,7 +28,7 @@ pipeline {
   }
   stage('cleanup') {
    steps {
-    sh "sudo kill \$(lsof -t -i:9001)"
+    sh "sudo -S kill \$(lsof -t -i:9001)"
     //sh 'fuser -n tcp -k 9001 | echo "killed"'
    }
   }
