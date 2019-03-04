@@ -31,13 +31,13 @@ pipeline {
    steps {
     sh 'echo "Hi"'
     //sh "kill \$(lsof -t -i:9001)"
-    sh 'fuser -n tcp -k 9001 | echo "hello"'
+    sh 'sudo fuser -n tcp -k 9001 | echo "hello"'
    }
   }
   stage('deploy') {
    steps {
     sh 'echo "Hi"'
-    sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
+    sh 'nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar & echo "Done"'
    }
   }
  }
