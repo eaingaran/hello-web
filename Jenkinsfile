@@ -31,7 +31,7 @@ pipeline {
    steps {
     sh 'echo "Hi"'
     //sh "kill \$(lsof -t -i:9001)"
-    sh 'fuser -n tcp -k 9001'
+    sh 'fuser -n tcp -k 9001 | echo "hello"'
    }
   }
   stage('deploy') {
