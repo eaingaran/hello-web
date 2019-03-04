@@ -30,14 +30,15 @@ pipeline {
   stage('cleanup') {
    steps {
     sh 'echo "Hi"'
-    sh "kill \$(lsof -t -i:9001)"
+    //sh "kill \$(lsof -t -i:9001)"
     //sh 'fuser -k 9001/tcp'
    }
   }
   stage('deploy') {
    steps {
     sh 'echo "Hi"'
-    sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
+    //sh "nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar"
+    sh 'ps | grep java-fullstack | awk '{print \$1}' | xargs kill -9 || true nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
    }
   }
  }
