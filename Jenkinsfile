@@ -27,7 +27,8 @@ pipeline {
   }
   stage('publish') {
    steps {
-    sh 'curl -u admin:password -X PUT "http://54.184.11.135:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
+    sh 'echo "Skipping upload due to low memory"'
+    //sh 'curl -u admin:password -X PUT "http://54.184.11.135:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
    }
   }
   stage('cleanup') {
