@@ -36,20 +36,20 @@ pipeline {
    steps {
     catchError {
             //sh 'fuser -n tcp -k 9001 | echo "killed"'
-            sh "sudo docker stop helloweb"
+            sh "docker stop helloweb"
     }
    }
   }
   stage('create Docker image') {
    steps {
      //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
-    sh "sudo docker build --tag=helloweb:0.0.1.${BUILD_ID} ."
+    sh "docker build --tag=helloweb:0.0.1.${BUILD_ID} ."
    }
   }
   stage('run Docker image') {
    steps {
      //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
-    sh "sudo docker run --name=helloweb -d -p 9001:9001  helloweb:0.0.1.${BUILD_ID}"
+    sh "docker run --name=helloweb -d -p 9001:9001  helloweb:0.0.1.${BUILD_ID}"
    }
   }
  }
