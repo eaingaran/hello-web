@@ -39,7 +39,7 @@ dependencyManagement {
 
 sonarqube {
 	properties {
-		property "sonar.host.url", "http://54.212.214.245:9000/" //  url is your sonar server
+		property "sonar.host.url", "http://54.184.11.135:9000/" //  url is your sonar server
 		property "sonar.projectName", "Hello Web"   //  this name will appear in dashboard
 		property "sonar.projectKey", "helo-web" // It sould be a keybased on this report is created
 		property "sonar.groovy.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
