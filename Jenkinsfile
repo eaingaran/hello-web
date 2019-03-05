@@ -49,7 +49,7 @@ pipeline {
   stage('run Docker image') {
    steps {
      //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
-    sh "sudo docker run --name=helloweb -d -p 8080:8080  helloweb:0.0.1.${BUILD_ID}"
+    sh "sudo docker run --name=helloweb -d -p 9001:9001  helloweb:0.0.1.${BUILD_ID}"
    }
   }
  }
