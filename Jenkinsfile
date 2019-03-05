@@ -7,22 +7,22 @@ pipeline {
  stages {
   stage('clean') {
    steps {
-    sh "gradle clean"
+    sh "gradle -Dorg.gradle.daemon=false clean"
    }
   }
   stage('test') {
    steps {
-    sh "gradle test"
+    sh "gradle -Dorg.gradle.daemon=false test"
    }
   }
   stage('build') {
    steps {
-    sh "gradle build"
+    sh "gradle -Dorg.gradle.daemon=false build"
    }
   }
   stage("Running SONAR") {
    steps {
-       sh 'gradle sonarqube -Dsonar.projectKey=helo-web -Dsonar.host.url=http://54.184.11.135:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
+       sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://54.184.11.135:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
    }
   }
   stage('publish') {
