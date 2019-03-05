@@ -22,7 +22,7 @@ pipeline {
   }
   stage("Running SONAR") {
    steps {
-       sh 'gradle clean sonarqube'
+       sh 'gradle sonarqube -Dsonar.projectKey=helo-web -Dsonar.host.url=http://54.184.11.135:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
    }
   }
   stage('publish') {
