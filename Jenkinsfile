@@ -22,7 +22,8 @@ pipeline {
   }
   stage("Running SONAR") {
    steps {
-       sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://54.184.11.135:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
+       sh 'echo "Skipping upload due to low memory"'
+       //sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://54.184.11.135:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
    }
   }
   stage('publish') {
@@ -33,17 +34,22 @@ pipeline {
   }
   stage('cleanup') {
    steps {
-    //sh "sudo kill \$(lsof -t -i:9001)"
-    //sh 'fuser -n tcp -k 9001 | echo "killed"'
     catchError {
-            sh 'fuser -n tcp -k 9001 | echo "killed"'
+            //sh 'fuser -n tcp -k 9001 | echo "killed"'
+            sh "sudo docker stop helloweb"
     }
-    //sh "curl -X POST 54.212.214.245:9001/actuator/shutdown"
    }
   }
-  stage('deploy') {
+  stage('create Docker image') {
    steps {
-     sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
+     //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
+    sh "sudo docker build --tag=helloweb:0.0.1.${BUILD_ID} ."
+   }
+  }
+  stage('run Docker image') {
+   steps {
+     //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
+    sh "sudo docker run --name=helloweb -d -p 8080:8080  helloweb:0.0.1.${BUILD_ID}"
    }
   }
  }
