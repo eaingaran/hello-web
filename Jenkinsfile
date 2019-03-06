@@ -3,7 +3,6 @@ pipeline {
  tools {
   gradle 'gradle'
   jdk 'jdk1.8.0'
-  DockerTool 'docker'
  }
  stages {
   stage('clean') {
