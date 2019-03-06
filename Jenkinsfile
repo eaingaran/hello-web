@@ -37,6 +37,7 @@ pipeline {
     catchError {
             //sh 'fuser -n tcp -k 9001 | echo "killed"'
             sh "docker stop helloweb"
+            sh "docker rm helloweb"
     }
    }
   }
