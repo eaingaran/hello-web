@@ -52,7 +52,7 @@ pipeline {
      docker.withRegistry('', registryCredential) {
       dockerImage.push()
      }
-     docker.withRegistry('http://52.24.251.72:8081/artifactory/docker/', artifactoryCredential) {
+     docker.withRegistry('//52.24.251.72:8081/artifactory/docker/', artifactoryCredential) {
       dockerImage.push()
      }
     }
