@@ -1,12 +1,12 @@
 pipeline {
  agent any
  environment {
-    registry = "eaingaran/hello-web"
-    registryCredential = 'credentials'
-    artifactoryCredential = 'artifactoryCredentials'
-    dockerImage = ''
-    containerId = sh(script: 'docker ps -aqf "name=helloweb"', returnStdout: true)
-  }
+  registry = "eaingaran/hello-web"
+  registryCredential = 'credentials'
+  artifactoryCredential = 'artifactoryCredentials'
+  dockerImage = ''
+  containerId = sh(script: 'docker ps -aqf "name=helloweb"', returnStdout: true)
+ }
  tools {
   gradle 'gradle'
   jdk 'jdk1.8.0'
@@ -29,8 +29,8 @@ pipeline {
   }
   stage("Running SONAR") {
    steps {
-       sh 'echo "Skipping upload due to low memory"'
-       //sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://52.24.251.72:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
+    sh 'echo "Skipping upload due to low memory"'
+    //sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://52.24.251.72:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
    }
   }
   stage('publish') {
@@ -40,46 +40,47 @@ pipeline {
    }
   }
   stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
-        }
-      }
+   steps {
+    script {
+     dockerImage = docker.build registry + ":$BUILD_NUMBER"
     }
-    stage('Push Image') {
-      steps{
-         script {
-            docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-          }
-          script {
-            docker.withRegistry( 'http://52.24.251.72:8081/artifactory/docker/', artifactoryCredential ) {
-            dockerImage.push()
-          }
-        }
-      }
+   }
+  }
+  stage('Push Image') {
+   steps {
+    script {
+     docker.withRegistry('', registryCredential) {
+      dockerImage.push()
+     }
+     docker.withRegistry('http://52.24.251.72:8081/artifactory/docker/', artifactoryCredential) {
+      dockerImage.push()
+     }
     }
+   }
+  }
   stage('Cleanup') {
-      when {
-                not { environment ignoreCase: true, name: 'containerId', value: '' }
-        }
-      steps {
-        sh 'docker stop ${containerId}'
-        sh 'docker rm ${containerId}'
-      }
+   when {
+    not {
+     environment ignoreCase: true, name: 'containerId', value: ''
     }
+   }
+   steps {
+    sh 'docker stop ${containerId}'
+    sh 'docker rm ${containerId}'
+   }
+  }
   stage('run Docker image') {
    steps {
-     //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
+    //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
     //sh "docker run --name=helloweb -d -p 9001:9001  helloweb:0.0.1.${BUILD_ID}"
     sh 'docker run --name=helloweb -d -p 3000:9001 $registry:$BUILD_NUMBER'
    }
   }
   stage('Remove Unused docker image') {
-      steps{
-        //sh "docker rmi $registry:$BUILD_NUMBER"
-       echo 'not implemented currently'
-      }
-    }
+   steps {
+    //sh "docker rmi $registry:$BUILD_NUMBER"
+    echo 'not implemented currently'
+   }
+  }
  }
 }
