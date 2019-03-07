@@ -1,5 +1,11 @@
 pipeline {
  agent any
+ environment {
+    registry = "eaingaran/hello-web"
+    registryCredential = 'credentials'
+    dockerImage = ''
+    containerId = sh(script: 'docker ps -aqf "name=helloweb"', returnStdout: true)
+  }
  tools {
   gradle 'gradle'
   jdk 'jdk1.8.0'
@@ -22,36 +28,52 @@ pipeline {
   }
   stage("Running SONAR") {
    steps {
-       sh 'echo "Skipping upload due to low memory"'
-       //sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://54.184.11.135:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
+       //sh 'echo "Skipping upload due to low memory"'
+       sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://52.24.251.72:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
    }
   }
   stage('publish') {
    steps {
-    sh 'echo "Skipping upload due to low memory"'
-    //sh 'curl -u admin:password -X PUT "http://54.184.11.135:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
+    //sh 'echo "Skipping upload due to low memory"'
+    sh 'curl -u admin:password -X PUT "http://52.24.251.72:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
    }
   }
-  stage('cleanup') {
-   steps {
-    catchError {
-            //sh 'fuser -n tcp -k 9001 | echo "killed"'
-            sh "docker stop helloweb"
-            sh "docker rm helloweb"
+  stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
     }
-   }
-  }
-  stage('create Docker image') {
-   steps {
-     //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
-    sh "docker build --tag=helloweb:0.0.1.${BUILD_ID} ."
-   }
-  }
+    stage('Push Image') {
+      steps{
+         script {
+            docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+  stage('Cleanup') {
+      when {
+                not { environment ignoreCase: true, name: 'containerId', value: '' }
+        }
+      steps {
+        sh 'docker stop ${containerId}'
+        sh 'docker rm ${containerId}'
+      }
+    }
   stage('run Docker image') {
    steps {
      //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
-    sh "docker run --name=helloweb -d -p 9001:9001  helloweb:0.0.1.${BUILD_ID}"
+    //sh "docker run --name=helloweb -d -p 9001:9001  helloweb:0.0.1.${BUILD_ID}"
+    sh 'docker run --name=node-app -d -p 3000:9001 $registry:$BUILD_NUMBER &'
    }
   }
+  stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
+    }
  }
 }
