@@ -3,6 +3,7 @@ pipeline {
  environment {
     registry = "eaingaran/hello-web"
     registryCredential = 'credentials'
+    artifactoryCredential = 'artifactoryCredentials'
     dockerImage = ''
     containerId = sh(script: 'docker ps -aqf "name=helloweb"', returnStdout: true)
   }
@@ -35,7 +36,7 @@ pipeline {
   stage('publish') {
    steps {
     sh 'echo "Skipping upload due to low memory"'
-    //sh 'curl -u admin:password -X PUT "http://52.24.251.72:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
+    sh 'curl -u admin:password -X PUT "http://52.24.251.72:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.2.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
    }
   }
   stage('Building image') {
@@ -49,6 +50,10 @@ pipeline {
       steps{
          script {
             docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+          script {
+            docker.withRegistry( 'http://52.24.251.72:8081/artifactory/docker/', artifactoryCredential ) {
             dockerImage.push()
           }
         }
@@ -67,7 +72,7 @@ pipeline {
    steps {
      //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
     //sh "docker run --name=helloweb -d -p 9001:9001  helloweb:0.0.1.${BUILD_ID}"
-    sh 'docker run --name=helloweb -d -p 3000:9001 $registry:$BUILD_NUMBER &'
+    sh 'docker run --name=helloweb -d -p 3000:9001 $registry:$BUILD_NUMBER'
    }
   }
   stage('Remove Unused docker image') {
