@@ -29,13 +29,13 @@ pipeline {
   }
   stage("Running SONAR") {
    steps {
-    sh 'echo "Skipping upload due to low memory"'
-    //sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://34.221.104.185:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
+    //sh 'echo "Skipping upload due to low memory"'
+    sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://34.221.104.185:9000 -Dsonar.login=664c5e9d4bce819bbb355cfd9a782b2b5a8680af'
    }
   }
   stage('publish') {
    steps {
-    sh 'echo "Skipping upload due to low memory"'
+    //sh 'echo "Skipping upload due to low memory"'
     sh 'curl -u admin:password -X PUT "http://34.221.104.185:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.2.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
    }
   }
@@ -52,7 +52,7 @@ pipeline {
      docker.withRegistry('', registryCredential) {
       dockerImage.push()
      }
-     docker.withRegistry('//34.221.104.185:8081/artifactory/docker/', artifactoryCredential) {
+     docker.withRegistry('http//34.221.104.185:8081/artifactory/docker/', artifactoryCredential) {
       dockerImage.push()
      }
     }
