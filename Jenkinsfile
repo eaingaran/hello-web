@@ -67,7 +67,7 @@ pipeline {
    steps {
      //sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar build/libs/hello-web-0.0.1-SNAPSHOT.jar &'
     //sh "docker run --name=helloweb -d -p 9001:9001  helloweb:0.0.1.${BUILD_ID}"
-    sh 'docker run --name=node-app -d -p 3000:9001 $registry:$BUILD_NUMBER &'
+    sh 'docker run --name=helloweb -d -p 3000:9001 $registry:$BUILD_NUMBER &'
    }
   }
   stage('Remove Unused docker image') {
