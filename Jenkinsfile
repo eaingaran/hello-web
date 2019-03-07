@@ -28,14 +28,14 @@ pipeline {
   }
   stage("Running SONAR") {
    steps {
-       //sh 'echo "Skipping upload due to low memory"'
-       sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://52.24.251.72:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
+       sh 'echo "Skipping upload due to low memory"'
+       //sh 'gradle sonarqube -Dorg.gradle.daemon=false -Dsonar.projectKey=helo-web -Dsonar.host.url=http://52.24.251.72:9000 -Dsonar.login=e6ead4be8327d4410cb4ba94d7d798cc55c810d0'
    }
   }
   stage('publish') {
    steps {
-    //sh 'echo "Skipping upload due to low memory"'
-    sh 'curl -u admin:password -X PUT "http://52.24.251.72:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
+    sh 'echo "Skipping upload due to low memory"'
+    //sh 'curl -u admin:password -X PUT "http://52.24.251.72:8081/artifactory/libs-snapshot-local/hello-web/hello-web-0.0.1.${BUILD_ID}.jar" -T build/libs/hello-web-0.0.1-SNAPSHOT.jar'
    }
   }
   stage('Building image') {
@@ -72,7 +72,8 @@ pipeline {
   }
   stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $registry:$BUILD_NUMBER"
+        //sh "docker rmi $registry:$BUILD_NUMBER"
+       echo 'not implemented currently'
       }
     }
  }
